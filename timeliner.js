@@ -54,7 +54,7 @@ module.exports={
 }
 
 },{}],"/Users/joshua/dev/gits/timeliner/src/datastore.js":[function(require,module,exports){
-var package_json = require('../package.json'),
+var package_json = require('./package.json'),
 Do = require('do.js');
 
 // Data Store with a source of truth
@@ -403,9 +403,9 @@ function handleDrag(element, ondown, onmove, onup, down_criteria) {
 
 module.exports = handleDrag;
 },{}],"/Users/joshua/dev/gits/timeliner/src/icon_button.js":[function(require,module,exports){
-var font = require('./font.json'),
-	Theme = require('./theme'),
-	style = require('./utils').style;
+var font = require('./src/font.json'),
+	Theme = require('./src/theme'),
+	style = require('./src/utils').style;
 
 var dp;
 
@@ -485,7 +485,6 @@ function IconButton(size, icon, tooltip, dp) {
 			e.stopPropagation();
 			longHoldTimer = setTimeout(function() {
 				if (longHoldTimer) {
-					console.log('LONG HOLD-ED!');
 					f();
 				}
 			}, LONG_HOLD_DURATION);
@@ -631,13 +630,13 @@ IconButton.prototype.draw = function() {
 
 module.exports = IconButton;
 },{"./font.json":"/Users/joshua/dev/gits/timeliner/src/font.json","./theme":"/Users/joshua/dev/gits/timeliner/src/theme.js","./utils":"/Users/joshua/dev/gits/timeliner/src/utils.js"}],"/Users/joshua/dev/gits/timeliner/src/layer_cabinet.js":[function(require,module,exports){
-var Settings = require('./settings'),
-	LayerUI = require('./ui/layer_view'),
-	IconButton = require('./icon_button'),
-	style = require('./utils').style,
-	Theme = require('./theme'),
-	STORAGE_PREFIX = require('./utils').STORAGE_PREFIX,
-	NumberUI = require('./ui/number')
+var Settings = require('./src/settings'),
+	LayerUI = require('./src/ui/layer_view'),
+	IconButton = require('./src/icon_button'),
+	style = require('./src/utils').style,
+	Theme = require('./src/theme'),
+	STORAGE_PREFIX = require('./src/utils').STORAGE_PREFIX,
+	NumberUI = require('./src/ui/number')
 	;
 
 function LayerCabinet(data, dispatcher) {
@@ -795,7 +794,6 @@ function LayerCabinet(data, dispatcher) {
 
 		var regex = new RegExp(STORAGE_PREFIX + '(.*)');
 		for (var key in localStorage) {
-			// console.log(key);
 
 			var match = regex.exec(key);
 			if (match) {
@@ -831,7 +829,6 @@ function LayerCabinet(data, dispatcher) {
 	});
 
 	dropdown.addEventListener('change', function(e) {
-		// console.log('changed', dropdown.length, dropdown.value);
 
 		switch (dropdown.value) {
 			case '*new*':
@@ -957,7 +954,6 @@ function LayerCabinet(data, dispatcher) {
 		layer_store = state;
 		layers = layer_store.value;
 		// layers = state;
-		console.log(layer_uis.length, layers);
 		var i, layer;
 		for (i = 0; i < layers.length; i++) {
 			layer = layers[i];
@@ -977,9 +973,6 @@ function LayerCabinet(data, dispatcher) {
 
 			// layer_uis[i].setState(layer);
 		}
-
-		console.log('Total layers (view, hidden, total)', layer_uis.length, unused_layers.length,
-			layer_uis.length + unused_layers.length);
 
 	};
 
@@ -1002,7 +995,6 @@ function LayerCabinet(data, dispatcher) {
 				continue;
 			}
 			
-			// console.log('yoz', states.get(i).value);
 			layer_uis[i].setState(layers[i], layer_store.get(i));
 			// layer_uis[i].setState('layers'+':'+i);
 			layer_uis[i].repaint(s);
@@ -1106,11 +1098,11 @@ module.exports = {
 };
 },{}],"/Users/joshua/dev/gits/timeliner/src/timeline_panel.js":[function(require,module,exports){
 var
-	Settings = require('./settings'),
-	Theme = require('./theme'),
-	utils = require('./utils'),
-	Tweens = require('./tween'),
-	handleDrag = require('./handle_drag');
+	Settings = require('./src/settings'),
+	Theme = require('./src/theme'),
+	utils = require('./src/utils'),
+	Tweens = require('./src/tween'),
+	handleDrag = require('./src/handle_drag');
 
 	var 
 		LINE_HEIGHT = Settings.LINE_HEIGHT,
@@ -1162,9 +1154,6 @@ function time_scaled() {
 	} else { // 1s per pixel
 		subds = [1/60, 1/60, 1/15, 'seconds'];
 	}
-
-	console.log(subds);
-
 
 	subd1 = subds[0]; // big ticks / labels
 	subd2 = subds[1]; // medium ticks
@@ -1678,23 +1667,23 @@ module.exports = TimelinePanel;
  * @author Joshua Koo http://joshuakoo.com
  */
 
-var undo = require('./undo'),
-	Dispatcher = require('./dispatcher'),
-	Theme = require('./theme'),
+var undo = require('./src/undo'),
+	Dispatcher = require('./src/dispatcher'),
+	Theme = require('./src/theme'),
 	UndoManager = undo.UndoManager,
 	UndoState = undo.UndoState,
-	Settings = require('./settings'),
-	utils = require('./utils'),
-	LayerCabinet = require('./layer_cabinet'),
-	TimelinePanel = require('./timeline_panel'),
-	package_json = require('../package.json'),
-	IconButton = require('./icon_button'),
+	Settings = require('./src/settings'),
+	utils = require('./src/utils'),
+	LayerCabinet = require('./src/layer_cabinet'),
+	TimelinePanel = require('./src/timeline_panel'),
+	package_json = require('./package.json'),
+	IconButton = require('./src/icon_button'),
 	style = utils.style,
 	saveToFile = utils.saveToFile,
 	openAs = utils.openAs,
 	STORAGE_PREFIX = utils.STORAGE_PREFIX,
-	ScrollBar = require('./ui/scrollbar'),
-	DataStore = require('./datastore')
+	ScrollBar = require('./src/ui/scrollbar'),
+	DataStore = require('./src/datastore')
 	;
 
 var Z_INDEX = 999;
@@ -2763,11 +2752,11 @@ var Tweens = {
 module.exports = Tweens;
 },{}],"/Users/joshua/dev/gits/timeliner/src/ui/layer_view.js":[function(require,module,exports){
 var
-	Theme = require('../theme'),
-	NumberUI = require('./number'),
-	Tweens = require('../tween'),
-	Settings = require('../settings'),
-	utils = require('../utils')
+	Theme = require('./src/theme'),
+	NumberUI = require('./src/ui/number'),
+	Tweens = require('./src/tween'),
+	Settings = require('./src/settings'),
+	utils = require('./src/utils')
 ;
 
 // TODO - tagged by index instead, work off layers.
@@ -2904,10 +2893,10 @@ function LayerView(layer, dispatcher) {
 module.exports = LayerView;
 
 },{"../settings":"/Users/joshua/dev/gits/timeliner/src/settings.js","../theme":"/Users/joshua/dev/gits/timeliner/src/theme.js","../tween":"/Users/joshua/dev/gits/timeliner/src/tween.js","../utils":"/Users/joshua/dev/gits/timeliner/src/utils.js","./number":"/Users/joshua/dev/gits/timeliner/src/ui/number.js"}],"/Users/joshua/dev/gits/timeliner/src/ui/number.js":[function(require,module,exports){
-var Theme = require('../theme'),
+var Theme = require('./src/theme'),
 	Do = require('do.js'),
-	handleDrag = require('../handle_drag'),
-	style = require('../utils').style
+	handleDrag = require('./src/handle_drag'),
+	style = require('./src/utils').style
 	;
 
 /**************************/
@@ -3000,7 +2989,7 @@ function NumberUI(config) {
 module.exports = NumberUI;
 },{"../handle_drag":"/Users/joshua/dev/gits/timeliner/src/handle_drag.js","../theme":"/Users/joshua/dev/gits/timeliner/src/theme.js","../utils":"/Users/joshua/dev/gits/timeliner/src/utils.js","do.js":"/Users/joshua/dev/gits/timeliner/node_modules/do.js/do.js"}],"/Users/joshua/dev/gits/timeliner/src/ui/scrollbar.js":[function(require,module,exports){
 var SimpleEvent = require('do.js');
-var utils = require('../utils');
+var utils = require('./src/utils');
 console.log(utils);
 
 // ********** class: ScrollBar ****************** //
@@ -3214,7 +3203,7 @@ module.exports = {
 };
 },{}],"/Users/joshua/dev/gits/timeliner/src/utils.js":[function(require,module,exports){
 var
-	Tweens = require('./tween');
+	Tweens = require('./src/tween');
 
 module.exports = {
 	STORAGE_PREFIX: 'timeliner-',
