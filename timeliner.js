@@ -1683,7 +1683,8 @@ var undo = require('./src/undo'),
 	openAs = utils.openAs,
 	STORAGE_PREFIX = utils.STORAGE_PREFIX,
 	ScrollBar = require('./src/ui/scrollbar'),
-	DataStore = require('./src/datastore')
+	DataStore = require('./src/datastore'),
+	Tween = require('./src/tween')
 	;
 
 var Z_INDEX = 999;
@@ -2029,6 +2030,18 @@ function Timeliner(target) {
 	// Expose API	
 	this.save = save;
 	this.load = load;
+
+	/* IMTI */
+	this.hasTween = function(name) {
+		return Tween[name] ? true : false;
+	}
+
+	this.registerTween = function(name, curve) {
+		Tween[name] = curve;
+		console.log(Tween);
+		return this;
+	}
+	/* IMTI */
 
 	/*
 		Start DOM Stuff (should separate file)
