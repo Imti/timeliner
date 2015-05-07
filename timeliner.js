@@ -2038,7 +2038,6 @@ function Timeliner(target) {
 
 	this.registerTween = function(name, curve) {
 		Tween[name] = curve;
-		console.log(Tween);
 		return this;
 	}
 	/* IMTI */
